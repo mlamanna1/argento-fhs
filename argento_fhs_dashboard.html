@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Argento — Agency Financial Health Score</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#204E7A;--steel:#2E6FA8;--ocean:#3B8DC6;--sky:#63ACDA;
+  --forest:#2A6644;--sage:#4A9168;--fern:#79BF9B;--mint:#E5F4EC;
+  --frost:#E3EEF6;--ice:#EDF4F9;--mist:#F4F8FC;--snow:#FAFCFE;
+  --textd:#204E7A;--textm:#4A6B8C;--textl:#8AAFC0;--border:#C8DAE8;
+  --neg:#B83A3A;
+}
+body{font-family:Calibri,"Segoe UI",Arial,sans-serif;background:var(--mist);color:var(--textm);font-size:14px;line-height:1.5;min-height:100vh}
+/* Header */
+.hdr{background:var(--ink);padding:0 32px;display:flex;align-items:stretch;border-bottom:3px solid var(--ocean)}
+.hdr-inner{display:flex;align-items:center;gap:16px;padding:16px 0}
+.hdr-logo{font-family:Georgia,"Times New Roman",serif;font-size:22px;font-weight:bold;color:#fff;letter-spacing:.06em}
+.hdr-div{width:1px;height:22px;background:var(--ocean);opacity:.5}
+.hdr-title{font-size:13px;color:var(--sky);letter-spacing:.03em}
+/* Info bar */
+.info-bar{background:var(--snow);border-bottom:1px solid var(--border);padding:12px 32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.info-field{display:flex;align-items:center;gap:8px}
+.info-field label{font-size:11px;color:var(--textl);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.info-field input{border:1px solid var(--border);padding:5px 10px;font-size:13px;color:var(--ink);background:#fff;font-family:Calibri,sans-serif;width:180px;outline:none;border-radius:0}
+.info-field input:focus{border-color:var(--ocean)}
+.reset-btn{margin-left:auto;padding:5px 16px;border:1px solid var(--border);background:#fff;color:var(--textm);font-size:12px;cursor:pointer;font-family:Calibri,sans-serif;border-radius:0}
+.reset-btn:hover{background:var(--ice)}
+/* Layout */
+.main{display:grid;grid-template-columns:1fr 295px;gap:20px;padding:22px 32px;max-width:1280px;margin:0 auto}
+@media(max-width:860px){.main{grid-template-columns:1fr;padding:16px}.score-panel{position:static}}
+/* Cards */
+.card{background:var(--snow);border:1px solid var(--border);position:relative;margin-bottom:12px}
+.card-hdr{padding:9px 14px 9px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.card-hdr::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+.dim-title{font-family:Georgia,serif;font-size:13px;font-weight:bold;color:var(--ink)}
+.dim-meta{font-size:11px;color:var(--textl)}
+.dim-live{font-family:Georgia,serif;font-size:17px;font-weight:bold}
+.card-body{padding:13px 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}
+/* Metrics */
+.m-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.m-name{font-size:11px;color:var(--textm)}
+.m-wt{font-size:10px;color:var(--textl)}
+.m-score{font-family:Georgia,serif;font-size:12px;font-weight:bold;min-width:22px;text-align:right}
+.m-row{display:flex;align-items:center;gap:6px}
+.m-input{width:72px;padding:5px 7px;border:1px solid #A8C5E8;font-size:12px;color:#0000CC;background:#EEF4FF;font-family:Calibri,sans-serif;outline:none;border-radius:0}
+.m-input:focus{border-color:var(--ocean)}
+.m-unit{font-size:11px;color:var(--textl)}
+.m-hint{font-size:10px;color:var(--textl);margin-top:2px;line-height:1.3}
+/* Score panel */
+.score-panel{position:sticky;top:20px}
+.s-card{background:var(--snow);border:1px solid var(--border);padding:22px 18px}
+.s-meta{font-size:11px;color:var(--textl);text-align:center;margin-bottom:14px;min-height:14px}
+.s-num{font-family:Georgia,serif;font-size:70px;line-height:1;text-align:center;font-weight:bold;transition:color .3s}
+.s-outof{font-size:11px;color:var(--textl);text-align:center;margin-top:2px;letter-spacing:.08em;text-transform:uppercase}
+.s-zone{display:flex;justify-content:center;margin:9px 0 4px}
+.zone-pill{display:inline-block;padding:3px 18px;font-size:12px;font-weight:bold;letter-spacing:.04em}
+.s-entered{font-size:11px;color:var(--textl);text-align:center;margin-bottom:14px}
+.s-hr{border:none;border-top:1px solid var(--border);margin:12px 0}
+/* Dim bars */
+.db{margin-bottom:10px}
+.db-hdr{display:flex;justify-content:space-between;margin-bottom:3px}
+.db-name{font-size:11px;color:var(--textm)}
+.db-wt{font-size:10px;color:var(--textl)}
+.db-score{font-family:Georgia,serif;font-size:13px;font-weight:bold}
+.bar-track{height:4px;background:var(--border);overflow:hidden}
+.bar-fill{height:100%;transition:width .35s ease}
+/* Zone legend */
+.zl{border-top:1px solid var(--border);padding-top:12px;margin-top:4px}
+.zl-title{font-size:10px;color:var(--textl);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.zl-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.zl-left{display:flex;align-items:center;gap:7px}
+.zl-dot{width:7px;height:7px;border-radius:50%}
+.zl-lbl{font-size:11px;color:var(--textm)}
+.zl-rng{font-size:10px;color:var(--textl)}
+/* Footer */
+.footer{background:var(--snow);border-top:1px solid var(--border);padding:10px 32px;font-size:11px;color:var(--textl);display:flex;gap:24px;flex-wrap:wrap}
+.footer strong{color:var(--textm)}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-inner">
+    <div class="hdr-logo">Argento</div>
+    <div class="hdr-div"></div>
+    <div class="hdr-title">Agency Financial Health Score</div>
+  </div>
+</div>
+
+<div class="info-bar">
+  <div class="info-field"><label>Client</label><input id="clientName" placeholder="Client name" oninput="render()"/></div>
+  <div class="info-field"><label>Month</label><input id="repMonth" placeholder="e.g. Apr 2025" oninput="render()"/></div>
+  <button class="reset-btn" onclick="resetAll()">Reset</button>
+</div>
+
+<div class="main">
+  <div id="inputPanel"></div>
+  <div class="score-panel">
+    <div class="s-card" id="scorePanel"></div>
+  </div>
+</div>
+
+<div class="footer">
+  <span><strong>Reconciliation:</strong> Metric weights: 20+10+10+10+5+12+8+5+10+10 = 100% &#10003;</span>
+  <span><strong>Dimension weights:</strong> 30+25+25+10+10 = 100% &#10003;</span>
+  <span><strong>Method:</strong> Linear interpolation between anchor points. Partial entry pro-rated.</span>
+</div>
+
+<script>
+const DIMS=[
+  {id:"prof",name:"Profitability",    weight:.30,color:"#204E7A",light:"#EDF4F9"},
+  {id:"rev", name:"Revenue quality",  weight:.25,color:"#2A6644",light:"#E5F4EC"},
+  {id:"liq", name:"Liquidity",        weight:.25,color:"#2E6FA8",light:"#E3EEF6"},
+  {id:"sol", name:"Solvency",         weight:.10,color:"#534AB7",light:"#F0EEFF"},
+  {id:"lab", name:"Labour efficiency",weight:.10,color:"#9A3412",light:"#FFF0EB"},
+];
+
+const METRICS=[
+  {id:"cm", dim:"prof",name:"Contribution margin",           unit:"%",     w:.20,ph:"e.g. 55", hint:"(Revenue − variable costs) ÷ revenue. Target: 70%", xs:[0,10,25,40,55,70],        ys:[1,2,4,6,8,10]},
+  {id:"noi",dim:"prof",name:"Net operating income",          unit:"%",     w:.10,ph:"e.g. 14", hint:"EBIT ÷ revenue",                                       xs:[-10,0,5,10,15,20],        ys:[1,2,4,6,8,10]},
+  {id:"grw",dim:"rev", name:"Revenue growth (YoY)",          unit:"%",     w:.10,ph:"e.g. 18", hint:"Year-over-year revenue growth",                        xs:[-10,-5,0,5,15,25],        ys:[1,2,4,5.5,8,10]},
+  {id:"ret",dim:"rev", name:"Retainer / recurring revenue",  unit:"%",     w:.10,ph:"e.g. 65", hint:"Contracted recurring ÷ total revenue",                 xs:[0,10,20,40,60,80],        ys:[1,2,4,6,8,10]},
+  {id:"tc3",dim:"rev", name:"Top 3 client concentration",    unit:"%",     w:.05,ph:"e.g. 48", hint:"Top 3 clients ÷ total revenue. Lower is better.",      xs:[20,30,40,55,70,85],       ys:[10,8,6,4,2,1]},
+  {id:"rwy",dim:"liq", name:"Cash runway",                   unit:"months",w:.12,ph:"e.g. 4",  hint:"Cash + AR ÷ avg monthly operating expenses",           xs:[0,1,2,3,4,5],             ys:[1,3,5,7,9,10]},
+  {id:"dso",dim:"liq", name:"Days sales outstanding",        unit:"days",  w:.08,ph:"e.g. 42", hint:"AR ÷ (Revenue ÷ 365). Lower is better.",               xs:[30,45,60,75,90,120],      ys:[10,8,6,4,2,1]},
+  {id:"cr", dim:"liq", name:"Current ratio",                 unit:"×",     w:.05,ph:"e.g. 1.8",hint:"Current assets ÷ current liabilities",                 xs:[0.5,1,1.25,1.5,2,2.5],   ys:[1,2,4,6,8,10]},
+  {id:"dte",dim:"sol", name:"Debt-to-equity ratio",          unit:"×",     w:.10,ph:"e.g. 0.8",hint:"Total debt ÷ total equity. Lower is better.",          xs:[0,0.5,1,2,3,4],           ys:[10,8,6,4,2,1]},
+  {id:"ler",dim:"lab", name:"Direct labour efficiency ratio",unit:"×",     w:.10,ph:"e.g. 2.8",hint:"Revenue ÷ direct labour cost",                         xs:[1,1.5,2,2.5,3,3.5],       ys:[1,2,4,6,8,10]},
+];
+
+const ZONES=[
+  {min:8.0,label:"Strong",  range:"8.0 – 10.0",dot:"#2A6644",tc:"#2A6644",bc:"#E5F4EC"},
+  {min:6.0,label:"Healthy", range:"6.0 – 7.9", dot:"#4A9168",tc:"#2A6644",bc:"#F0FAF4"},
+  {min:4.0,label:"Caution", range:"4.0 – 5.9", dot:"#B45309",tc:"#7C3700",bc:"#FFF4E0"},
+  {min:2.0,label:"At risk", range:"2.0 – 3.9", dot:"#B83A3A",tc:"#7A1A1A",bc:"#FFF0F0"},
+  {min:0,  label:"Critical",range:"1.0 – 1.9", dot:"#7A1A1A",tc:"#7A1A1A",bc:"#FDEAEA"},
+];
+
+function lerp(v,xs,ys){
+  if(v<=xs[0])return ys[0];
+  if(v>=xs[xs.length-1])return ys[ys.length-1];
+  for(let i=0;i<xs.length-1;i++){
+    if(v>=xs[i]&&v<=xs[i+1])return ys[i]+(v-xs[i])/(xs[i+1]-xs[i])*(ys[i+1]-ys[i]);
+  }
+  return ys[0];
+}
+function getZone(s){return ZONES.find(z=>s>=z.min)||ZONES[ZONES.length-1]}
+
+function getVals(){
+  const v={};
+  METRICS.forEach(m=>{
+    const el=document.getElementById("inp_"+m.id);
+    if(el){const n=parseFloat(el.value);if(!isNaN(n))v[m.id]=n;}
+  });
+  return v;
+}
+
+function calc(){
+  const vals=getVals();
+  const ms={};
+  METRICS.forEach(m=>{
+    if(vals[m.id]!==undefined)ms[m.id]=Math.min(10,Math.max(1,lerp(vals[m.id],m.xs,m.ys)));
+  });
+  const ds={};
+  DIMS.forEach(d=>{
+    const dm=METRICS.filter(m=>m.dim===d.id);
+    const filled=dm.filter(m=>ms[m.id]!==undefined);
+    if(!filled.length){ds[d.id]=null;return;}
+    const wS=filled.reduce((s,m)=>s+ms[m.id]*m.w,0);
+    const wT=filled.reduce((s,m)=>s+m.w,0);
+    ds[d.id]=wS/wT;
+  });
+  const sd=DIMS.filter(d=>ds[d.id]!==null);
+  let comp=null;
+  if(sd.length){
+    const wS=sd.reduce((s,d)=>s+ds[d.id]*d.weight,0);
+    const wT=sd.reduce((s,d)=>s+d.weight,0);
+    comp=wS/wT;
+  }
+  return{ms,ds,comp,filled:Object.keys(vals).length};
+}
+
+function buildInputs(){
+  const panel=document.getElementById("inputPanel");
+  const dims_order=DIMS.map(d=>d.id);
+  const mByDim={};
+  dims_order.forEach(id=>mByDim[id]=[]);
+  METRICS.forEach(m=>mByDim[m.dim].push(m));
+
+  panel.innerHTML=DIMS.map(d=>{
+    const cols=mByDim[d.id].map(m=>`
+      <div>
+        <div class="m-label">
+          <span class="m-name">${m.name} <span class="m-wt">(${(m.w*100).toFixed(0)}%)</span></span>
+          <span class="m-score" id="ms_${m.id}"></span>
+        </div>
+        <div class="m-row">
+          <input class="m-input" id="inp_${m.id}" type="number" placeholder="${m.ph}" oninput="render()"/>
+          <span class="m-unit">${m.unit}</span>
+        </div>
+        <div class="m-hint">${m.hint}</div>
+      </div>`).join("");
+
+    return`<div class="card">
+      <div class="card-hdr" style="--accent:${d.color}">
+        <style>#card_${d.id}.card::before{background:${d.color}}</style>
+        <div>
+          <div class="dim-title">${d.name}</div>
+          <div class="dim-meta">${(d.weight*100).toFixed(0)}% of total score</div>
+        </div>
+        <div class="dim-live" id="ds_${d.id}" style="color:${d.color}">—</div>
+      </div>
+      <div class="card-body" style="background:${d.light}">${cols}</div>
+    </div>`.replace('<div class="card">',`<div class="card" id="card_${d.id}">`);
+  }).join("");
+}
+
+function render(){
+  const{ms,ds,comp,filled}=calc();
+  const zone=comp!==null?getZone(comp):null;
+  const client=document.getElementById("clientName").value||"";
+  const month=document.getElementById("repMonth").value||"";
+  const meta=[client,month].filter(Boolean).join(" &middot; ");
+
+  // Update metric scores inline
+  METRICS.forEach(m=>{
+    const el=document.getElementById("ms_"+m.id);
+    if(!el)return;
+    const d=DIMS.find(x=>x.id===m.dim);
+    if(ms[m.id]!==undefined){el.textContent=ms[m.id].toFixed(1);el.style.color=d.color;}
+    else el.textContent="";
+  });
+  DIMS.forEach(d=>{
+    const el=document.getElementById("ds_"+d.id);
+    if(el){el.textContent=ds[d.id]!==null?ds[d.id].toFixed(1):"—";}
+  });
+
+  // Score panel
+  const bigScore=comp!==null
+    ?`<div class="s-num" style="color:${zone.tc}">${comp.toFixed(1)}</div>`
+    :`<div class="s-num" style="color:#C8DAE8">—</div>`;
+
+  const zonePill=zone
+    ?`<span class="zone-pill" style="background:${zone.bc};color:${zone.tc}">${zone.label}</span>`
+    :`<span style="font-size:12px;color:#8AAFC0">Enter metrics to calculate</span>`;
+
+  const bars=DIMS.map(d=>{
+    const s=ds[d.id];
+    const pct=s!==null?(s/10*100).toFixed(1):0;
+    return`<div class="db">
+      <div class="db-hdr">
+        <span class="db-name">${d.name} <span class="db-wt">${(d.weight*100).toFixed(0)}%</span></span>
+        <span class="db-score" style="color:${s!==null?d.color:"#C8DAE8"}">${s!==null?s.toFixed(1):"—"}</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${d.color}"></div></div>
+    </div>`;
+  }).join("");
+
+  const zlegend=ZONES.map(z=>`
+    <div class="zl-row">
+      <div class="zl-left"><div class="zl-dot" style="background:${z.dot}"></div><span class="zl-lbl">${z.label}</span></div>
+      <span class="zl-rng">${z.range}</span>
+    </div>`).join("");
+
+  document.getElementById("scorePanel").innerHTML=`
+    <div class="s-meta">${meta||"&nbsp;"}</div>
+    ${bigScore}
+    <div class="s-outof">out of 10</div>
+    <div class="s-zone"><div class="zone-pill" style="background:${zone?zone.bc:"transparent"};color:${zone?zone.tc:"#8AAFC0"}">${zone?zone.label:"Enter metrics to calculate"}</div></div>
+    <div class="s-entered">${filled} of ${METRICS.length} metrics entered</div>
+    <hr class="s-hr"/>
+    ${bars}
+    <div class="zl">
+      <div class="zl-title">Score zones</div>
+      ${zlegend}
+    </div>`;
+}
+
+function resetAll(){
+  METRICS.forEach(m=>{const el=document.getElementById("inp_"+m.id);if(el)el.value="";});
+  document.getElementById("clientName").value="";
+  document.getElementById("repMonth").value="";
+  render();
+}
+
+buildInputs();
+render();
+</script>
+</body>
+</html>
