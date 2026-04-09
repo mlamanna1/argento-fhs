@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Agency Financial Health Score — Argento CPA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e2f52;
+  --bg-card:#0a2644;
+  --bg-input:#081e35;
+  --bg-deep:#071929;
+  --border:#1a3f6a;
+  --border-hover:#2d5c8a;
+  --green:#39d160;
+  --green-dark:#2cb84f;
+  --green-dim:rgba(57,209,96,.13);
+  --text-white:#ffffff;
+  --text-light:#c5d8ec;
+  --text-muted:#7a9bbf;
+  --text-dim:#4a6a8a;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Alexandria",system-ui,sans-serif;
+  background:#0e2f52;
+  color:var(--text-light);
+  font-size:14px;
+  line-height:1.5;
+  min-height:100vh;
+}
+
+/* ── Header ── */
+.hdr{
+  background:#081e35;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+}
+.hdr-inner{
+  max-width:1300px;margin:0 auto;padding:0 28px;
+  display:flex;align-items:center;justify-content:space-between;height:60px;
+}
+.hdr-logo{height:36px;display:block}
+.hdr-tool{font-size:12px;color:var(--text-muted);letter-spacing:.04em}
+.hdr-cta{
+  background:var(--green);color:#071929;
+  font-size:12px;font-weight:700;letter-spacing:.04em;
+  padding:9px 18px;border-radius:6px;border:none;cursor:pointer;
+  font-family:"Alexandria",sans-serif;transition:background .15s;white-space:nowrap;
+}
+.hdr-cta:hover{background:var(--green-dark)}
+
+/* ── Hero ── */
+.hero{text-align:center;padding:52px 28px 38px}
+.hero h1{
+  font-size:40px;font-weight:800;
+  color:var(--text-white);line-height:1.2;margin-bottom:16px;
+  letter-spacing:-.01em;
+}
+.hero h1 em{color:var(--green);font-style:normal}
+.hero p{
+  font-size:15px;color:var(--text-muted);
+  max-width:560px;margin:0 auto 28px;line-height:1.75;font-weight:400;
+}
+.hero-divider{width:50px;height:3px;background:var(--green);border-radius:2px;margin:0 auto}
+
+/* ── Client bar ── */
+.client-bar{max-width:1300px;margin:0 auto;padding:0 28px 26px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.client-field{display:flex;align-items:center;gap:10px}
+.client-field label{font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap}
+.client-input{
+  background:var(--bg-card);border:1px solid var(--border);
+  color:var(--text-white);font-family:"Alexandria",sans-serif;font-size:13px;
+  padding:9px 14px;border-radius:6px;outline:none;width:200px;
+  transition:border-color .15s;
+}
+.client-input::placeholder{color:var(--text-dim)}
+.client-input:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--green-dim)}
+.reset-btn{
+  margin-left:auto;background:transparent;border:1px solid var(--border);
+  color:var(--text-muted);font-size:12px;padding:8px 16px;border-radius:6px;
+  cursor:pointer;font-family:"Alexandria",sans-serif;transition:all .15s;
+}
+.reset-btn:hover{border-color:var(--border-hover);color:var(--text-light)}
+
+/* ── Main grid ── */
+.main{max-width:1300px;margin:0 auto;padding:0 28px 44px;display:grid;grid-template-columns:1fr 292px;gap:16px;align-items:start}
+@media(max-width:920px){.main{grid-template-columns:1fr;padding:0 16px 32px}.sticky-col{position:static!important}}
+
+/* ── Dimension cards ── */
+.dim-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.dim-card-hdr{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.dim-step{font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px}
+.dim-name{font-size:16px;font-weight:700;color:var(--text-white);letter-spacing:.01em}
+.dim-sub{font-size:11px;color:var(--text-muted);margin-top:2px;font-weight:400}
+.dim-score-badge{text-align:right}
+.dim-score-num{font-size:24px;font-weight:800;line-height:1}
+.dim-score-wt{font-size:10px;color:var(--text-dim);margin-top:3px;font-weight:400}
+.dim-body{padding:16px 18px;background:#0c2244;display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}
+
+/* ── Metric ── */
+.m-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.m-name{font-size:12px;font-weight:500;color:var(--text-light)}
+.m-wt{font-size:10px;color:var(--text-dim);font-weight:400}
+.m-score-live{font-size:12px;font-weight:700;min-width:28px;text-align:right;transition:color .2s}
+.m-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.m-input{
+  width:78px;padding:7px 10px;
+  background:var(--bg-input);border:1px solid var(--border);
+  color:#60d4f5;font-family:"Alexandria",sans-serif;font-size:12px;font-weight:500;
+  border-radius:5px;outline:none;transition:border-color .15s,box-shadow .15s;
+}
+.m-input::placeholder{color:var(--text-dim);font-weight:400}
+.m-input:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--green-dim)}
+.m-unit{font-size:11px;color:var(--text-dim);font-weight:400}
+.m-hint{font-size:10px;color:var(--text-dim);line-height:1.4;font-weight:400}
+
+/* ── Score panel ── */
+.sticky-col{position:sticky;top:76px}
+.score-panel{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.sp-top{padding:22px 18px 16px;border-bottom:1px solid var(--border);text-align:center}
+.sp-client{font-size:11px;color:var(--text-dim);margin-bottom:10px;min-height:14px;letter-spacing:.04em;font-weight:400}
+.sp-num{font-size:78px;font-weight:800;line-height:1;transition:color .3s}
+.sp-outof{font-size:11px;color:var(--text-dim);margin-top:4px;letter-spacing:.12em;text-transform:uppercase;font-weight:400}
+.sp-zone-wrap{display:flex;justify-content:center;margin:11px 0 6px}
+.zone-pill{padding:4px 22px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.05em}
+.sp-count{font-size:11px;color:var(--text-dim);font-weight:400}
+.sp-bars{padding:16px 18px;border-bottom:1px solid var(--border)}
+.db{margin-bottom:11px}
+.db:last-child{margin-bottom:0}
+.db-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.db-name{font-size:11px;color:var(--text-light);font-weight:400}
+.db-wt{font-size:10px;color:var(--text-dim);margin-left:3px}
+.db-score{font-size:14px;font-weight:700}
+.bar-bg{height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.bar-fg{height:100%;border-radius:2px;transition:width .4s ease}
+.sp-legend{padding:14px 18px}
+.leg-title{font-size:10px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.leg-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.leg-row:last-child{margin-bottom:0}
+.leg-left{display:flex;align-items:center;gap:8px}
+.leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.leg-lbl{font-size:11px;color:var(--text-light);font-weight:400}
+.leg-rng{font-size:10px;color:var(--text-dim);font-weight:400}
+
+/* ── Footer ── */
+.footer{background:#081e35;border-top:1px solid var(--border)}
+.footer-inner{max-width:1300px;margin:0 auto;padding:22px 28px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:20px}
+.footer-logo{height:28px;opacity:.75;margin-bottom:10px;display:block}
+.footer-tagline{font-size:11px;color:var(--text-dim);line-height:1.7;font-weight:400}
+.footer-recon{font-size:11px;color:var(--text-dim);line-height:1.85;text-align:right;font-weight:400}
+.footer-recon strong{color:var(--text-muted);font-weight:600}
+.footer-btm{border-top:1px solid rgba(255,255,255,.05)}
+.footer-btm-inner{max-width:1300px;margin:0 auto;padding:10px 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.footer-copy{font-size:11px;color:var(--text-dim);font-weight:400}
+.footer-link{font-size:11px;color:var(--text-muted);text-decoration:none;font-weight:400}
+.footer-link:hover{color:var(--green)}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <img src="data:image/png;base64,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" alt="Argento CPA" class="hdr-logo"/>
+    <div class="hdr-tool">Agency Financial Health Score</div>
+    <button class="hdr-cta" onclick="window.open('https://argentocpa.ca/contact-us/','_blank')">Get Your Personalized Action Plan &rarr;</button>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>What's Your Agency's<br><em>Financial Health Score?</em></h1>
+  <p>Enter your numbers below. This proprietary scoring framework is built specifically for marketing agencies — factoring in profitability, liquidity, revenue quality, solvency, and labour efficiency.</p>
+  <div class="hero-divider"></div>
+</div>
+
+<div class="client-bar">
+  <div class="client-field"><label>Client</label><input class="client-input" id="clientName" placeholder="Client name" oninput="render()"/></div>
+  <div class="client-field"><label>Month</label><input class="client-input" id="repMonth" placeholder="e.g. Apr 2025" oninput="render()"/></div>
+  <button class="reset-btn" onclick="resetAll()">&#8635; Reset</button>
+</div>
+
+<div class="main">
+  <div id="inputPanel"></div>
+  <div class="sticky-col"><div class="score-panel" id="scorePanel"></div></div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <img src="data:image/png;base64,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" alt="Argento CPA" class="footer-logo"/>
+      <div class="footer-tagline">The Finance Team for $2M&#8211;$10M Marketing Agencies<br>36 Water Street, Vancouver, B.C. V6B 0B7 &nbsp;&#183;&nbsp; 604-306-0165</div>
+    </div>
+    <div class="footer-recon">
+      <strong>Reconciliation</strong><br>
+      Metric weights: 15+10+10+10+10+10+5+10+10+10 = 100% &#10003;<br>
+      Dimension weights: 25+30+25+10+10 = 100% &#10003;<br>
+      Method: Linear interpolation. Partial entry pro-rated.
+    </div>
+  </div>
+  <div class="footer-btm">
+    <div class="footer-btm-inner">
+      <span class="footer-copy">&#169; 2025 Argento CPA. All rights reserved.</span>
+      <a href="https://argentocpa.ca" target="_blank" class="footer-link">argentocpa.ca &#8599;</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const DIMS=[
+  {id:"prof",name:"Profitability",    weight:.25,step:"Step 1",sub:"Margin and earnings performance",       color:"#38bdf8"},
+  {id:"rev", name:"Revenue quality",  weight:.30,step:"Step 2",sub:"Growth, retention, and concentration",  color:"#39d160"},
+  {id:"liq", name:"Liquidity",        weight:.25,step:"Step 3",sub:"Cash position and collection speed",    color:"#a78bfa"},
+  {id:"sol", name:"Solvency",         weight:.10,step:"Step 4",sub:"Debt and capital structure",            color:"#fb923c"},
+  {id:"lab", name:"Labour efficiency",weight:.10,step:"Step 5",sub:"Revenue generated per labour dollar",  color:"#f472b6"},
+];
+const METRICS=[
+  {id:"cm", dim:"prof",name:"Contribution margin",           unit:"%",     w:.15,ph:"e.g. 55", hint:"(Revenue − variable costs) ÷ revenue. Target: 70%",xs:[0,10,25,50,60,70],     ys:[1,2,4,6,8,10]},
+  {id:"noi",dim:"prof",name:"Net operating income",          unit:"%",     w:.10,ph:"e.g. 14", hint:"EBIT ÷ revenue",                                         xs:[0,5,10,15,20,30],      ys:[1,2,4,6,8,10]},
+  {id:"grw",dim:"rev", name:"Revenue growth (YoY)",          unit:"%",     w:.10,ph:"e.g. 18", hint:"Year-over-year revenue growth",                               xs:[-10,-5,0,5,15,25],     ys:[1,2,4,5.5,8,10]},
+  {id:"ret",dim:"rev", name:"Retainer / recurring revenue",  unit:"%",     w:.10,ph:"e.g. 65", hint:"Contracted recurring ÷ total revenue",                   xs:[0,10,20,40,60,80],     ys:[1,2,4,6,8,10]},
+  {id:"tc3",dim:"rev", name:"Top 3 client concentration",    unit:"%",     w:.10,ph:"e.g. 48", hint:"Top 3 clients ÷ total revenue. Lower is better.",        xs:[20,30,40,55,70,85],    ys:[10,8,6,4,2,1]},
+  {id:"rwy",dim:"liq", name:"Cash runway",                   unit:"months",w:.10,ph:"e.g. 4",  hint:"Cash + AR ÷ avg monthly operating expenses",             xs:[0,1,2,3,4,5],          ys:[1,3,5,7,9,10]},
+  {id:"dso",dim:"liq", name:"Days sales outstanding",        unit:"days",  w:.05,ph:"e.g. 35", hint:"AR ÷ (Revenue ÷ 365). Lower is better.",            xs:[10,20,30,45,60,90],    ys:[10,8,6,4,2,1]},
+  {id:"cr", dim:"liq", name:"Current ratio",                 unit:"×",w:.10,ph:"e.g. 1.8",hint:"Current assets ÷ current liabilities",                  xs:[0.5,1,1.25,1.5,2,2.5],ys:[1,2,4,6,8,10]},
+  {id:"dte",dim:"sol", name:"Debt-to-equity ratio",          unit:"×",w:.10,ph:"e.g. 0.8",hint:"Total debt ÷ total equity. Lower is better.",            xs:[0,0.5,1,2,3,4],        ys:[10,8,6,4,2,1]},
+  {id:"ler",dim:"lab", name:"Direct labour efficiency ratio",unit:"×",w:.10,ph:"e.g. 2.8",hint:"Revenue ÷ direct labour cost",                           xs:[1,1.5,2,2.5,3,3.5],    ys:[1,2,4,6,8,10]},
+];
+const ZONES=[
+  {min:8.0,label:"Strong",  range:"8.0 – 10.0",dot:"#39d160",tc:"#39d160",bc:"rgba(57,209,96,.13)"},
+  {min:6.0,label:"Healthy", range:"6.0 – 7.9", dot:"#38bdf8",tc:"#38bdf8",bc:"rgba(56,189,248,.13)"},
+  {min:4.0,label:"Caution", range:"4.0 – 5.9", dot:"#f59e0b",tc:"#f59e0b",bc:"rgba(245,158,11,.13)"},
+  {min:2.0,label:"At Risk",  range:"2.0 – 3.9", dot:"#f87171",tc:"#f87171",bc:"rgba(248,113,113,.13)"},
+  {min:0,  label:"Critical",range:"1.0 – 1.9", dot:"#ef4444",tc:"#ef4444",bc:"rgba(239,68,68,.13)"},
+];
+function lerp(v,xs,ys){
+  if(v<=xs[0])return ys[0];if(v>=xs[xs.length-1])return ys[ys.length-1];
+  for(let i=0;i<xs.length-1;i++)if(v>=xs[i]&&v<=xs[i+1])return ys[i]+(v-xs[i])/(xs[i+1]-xs[i])*(ys[i+1]-ys[i]);
+  return ys[0];
+}
+function getZone(s){return ZONES.find(z=>s>=z.min)||ZONES[ZONES.length-1];}
+function getVals(){
+  const v={};
+  METRICS.forEach(m=>{const el=document.getElementById("i_"+m.id);if(el){const n=parseFloat(el.value);if(!isNaN(n))v[m.id]=n;}});
+  return v;
+}
+function calc(){
+  const vals=getVals(),ms={},ds={};
+  METRICS.forEach(m=>{if(vals[m.id]!==undefined)ms[m.id]=Math.min(10,Math.max(1,lerp(vals[m.id],m.xs,m.ys)));});
+  DIMS.forEach(d=>{
+    const fl=METRICS.filter(m=>m.dim===d.id&&ms[m.id]!==undefined);
+    if(!fl.length){ds[d.id]=null;return;}
+    ds[d.id]=fl.reduce((s,m)=>s+ms[m.id]*m.w,0)/fl.reduce((s,m)=>s+m.w,0);
+  });
+  const sd=DIMS.filter(d=>ds[d.id]!==null);
+  const comp=sd.length?sd.reduce((s,d)=>s+ds[d.id]*d.weight,0)/sd.reduce((s,d)=>s+d.weight,0):null;
+  return{ms,ds,comp,filled:Object.keys(vals).length};
+}
+function buildInputs(){
+  const mByDim={};DIMS.forEach(d=>mByDim[d.id]=[]);METRICS.forEach(m=>mByDim[m.dim].push(m));
+  document.getElementById("inputPanel").innerHTML=DIMS.map(d=>`
+    <div class="dim-card">
+      <div class="dim-card-hdr">
+        <div>
+          <div class="dim-step">${d.step}</div>
+          <div class="dim-name">${d.name}</div>
+          <div class="dim-sub">${d.sub}</div>
+        </div>
+        <div class="dim-score-badge">
+          <div class="dim-score-num" id="ds_${d.id}" style="color:${d.color}">&#8212;</div>
+          <div class="dim-score-wt">${(d.weight*100).toFixed(0)}% weight</div>
+        </div>
+      </div>
+      <div class="dim-body">
+        ${mByDim[d.id].map(m=>`
+          <div>
+            <div class="m-top">
+              <span class="m-name">${m.name} <span class="m-wt">(${(m.w*100).toFixed(0)}%)</span></span>
+              <span class="m-score-live" id="ms_${m.id}" style="color:${d.color}"></span>
+            </div>
+            <div class="m-row">
+              <input class="m-input" id="i_${m.id}" type="number" placeholder="${m.ph}" oninput="render()"/>
+              <span class="m-unit">${m.unit}</span>
+            </div>
+            <div class="m-hint">${m.hint}</div>
+          </div>`).join("")}
+      </div>
+    </div>`).join("");
+}
+function render(){
+  const{ms,ds,comp,filled}=calc();
+  const zone=comp!==null?getZone(comp):null;
+  const client=document.getElementById("clientName").value||"";
+  const month=document.getElementById("repMonth").value||"";
+  const meta=[client,month].filter(Boolean).join("  ·  ");
+  METRICS.forEach(m=>{
+    const el=document.getElementById("ms_"+m.id),d=DIMS.find(x=>x.id===m.dim);
+    if(el){el.textContent=ms[m.id]!==undefined?ms[m.id].toFixed(1):"";el.style.color=d.color;}
+  });
+  DIMS.forEach(d=>{
+    const el=document.getElementById("ds_"+d.id);
+    if(el){el.textContent=ds[d.id]!==null?ds[d.id].toFixed(1):"&#8212;";el.style.color=ds[d.id]!==null?d.color:"#4a6a8a";}
+  });
+  const nc=zone?zone.tc:"#4a6a8a";
+  const bars=DIMS.map(d=>{
+    const s=ds[d.id],pct=s!==null?(s/10*100).toFixed(1):0;
+    return`<div class="db"><div class="db-top"><span class="db-name">${d.name}<span class="db-wt">${(d.weight*100).toFixed(0)}%</span></span><span class="db-score" style="color:${s!==null?d.color:"#4a6a8a"}">${s!==null?s.toFixed(1):"&#8212;"}</span></div><div class="bar-bg"><div class="bar-fg" style="width:${pct}%;background:${d.color}"></div></div></div>`;
+  }).join("");
+  const leg=ZONES.map(z=>`<div class="leg-row"><div class="leg-left"><div class="leg-dot" style="background:${z.dot}"></div><span class="leg-lbl">${z.label}</span></div><span class="leg-rng">${z.range}</span></div>`).join("");
+  document.getElementById("scorePanel").innerHTML=`
+    <div class="sp-top">
+      <div class="sp-client">${meta||"&nbsp;"}</div>
+      <div class="sp-num" style="color:${nc}">${comp!==null?comp.toFixed(1):"&#8212;"}</div>
+      <div class="sp-outof">out of 10</div>
+      <div class="sp-zone-wrap">${zone?`<span class="zone-pill" style="background:${zone.bc};color:${zone.tc}">${zone.label}</span>`:`<span style="font-size:12px;color:#4a6a8a">Enter metrics to score</span>`}</div>
+      <div class="sp-count">${filled} of ${METRICS.length} metrics entered</div>
+    </div>
+    <div class="sp-bars">${bars}</div>
+    <div class="sp-legend"><div class="leg-title">Score zones</div>${leg}</div>`;
+}
+function resetAll(){
+  METRICS.forEach(m=>{const el=document.getElementById("i_"+m.id);if(el)el.value="";});
+  document.getElementById("clientName").value="";document.getElementById("repMonth").value="";render();
+}
+buildInputs();render();
+</script>
+</body>
+</html>
